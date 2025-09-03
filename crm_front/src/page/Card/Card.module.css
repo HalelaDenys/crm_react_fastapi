@@ -1,0 +1,10 @@
+@reference "tailwindcss";
+
+.update-btn {
+    @apply mr-2 px-4 py-2 bg-purple-600 text-white 
+    rounded hover:bg-purple-800 transition duration-300 ease-in-out disabled:opacity-50
+}
+
+.delete-btn {
+    @apply px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700 disabled:opacity-50
+}

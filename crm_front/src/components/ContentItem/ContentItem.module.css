@@ -1,0 +1,7 @@
+@reference "tailwindcss";
+
+.content-item {
+    @apply border border-black rounded-md px-4 py-1 text-white
+    flex justify-between items-center
+
+}

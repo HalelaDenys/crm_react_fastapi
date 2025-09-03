@@ -1,0 +1,20 @@
+@reference "tailwindcss";
+
+.Sidebar-wrapper {
+    @apply fixed lg:relative top-0 left-0 h-screen w-[232px] bg-gray-800 
+    text-white flex flex-col py-4 z-40 transform 
+    transition-transform duration-700 ease-in-out lg:translate-x-0;
+}
+
+.closeSidebar {
+    @apply lg:hidden text-white self-end mx-4;
+}
+
+.h2-style {
+    @apply text-xl font-bold mt-6 mb-4 p-2 mx-2;
+}
+
+.btn {
+    @apply block pb-4 px-4 hover:bg-gray-700/80 hover:text-purple-400 
+          transition duration-300 ease-in-out p-2 rounded
+}

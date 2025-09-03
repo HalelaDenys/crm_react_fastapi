@@ -1,0 +1,7 @@
+@reference "tailwindcss";
+
+.btn {
+  @apply mb-1 p-1.5 text-white border border-transparent rounded
+        hover:text-purple-700 hover:border-purple-700
+          transition duration-600 ease-in-out;
+}
