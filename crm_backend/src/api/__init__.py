@@ -7,6 +7,7 @@ from api.positions.views import router as positions_router
 from api.categories.views import router as categories_router
 from api.services.views import router as services_router
 from api.booking.views import router as booking_router
+from api.tg_users.views import router as tg_users_router
 
 api_router = APIRouter(prefix=settings.api_prefix.api_v1)
 api_router.include_router(auth_router)
@@ -16,3 +17,4 @@ api_router.include_router(positions_router)
 api_router.include_router(categories_router)
 api_router.include_router(services_router)
 api_router.include_router(booking_router)
+api_router.include_router(tg_users_router)

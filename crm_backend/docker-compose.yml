@@ -1,7 +1,7 @@
 services:
   postgres_db:
     image: postgres:16
-    container_name: srm_db
+    container_name: crm_db
     env_file:
       - src/.env
     environment:
@@ -19,5 +19,24 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: crm_rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: "guest"
+      RABBITMQ_DEFAULT_PASS: "guest"
+    ports:
+      - "5672:5672"   # AMQP
+      - "15672:15672" # Web UI
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - rabbitmq_data:/var/lib/postgresql/rabbitmq
+
+
 volumes:
   postgres_data:
+  rabbitmq_data:

@@ -1,7 +1,7 @@
 from services.employee_service import get_employee_service, EmployeeService
 from core.authentication import get_auth_user_from_token_of_type
 from schemas.employee_shemas import LoginSchema
-from fastapi import Depends, Form
+from fastapi import Depends, Form, HTTPException
 from infrastructure import Employee
 from typing import Annotated
 from core import (
@@ -11,7 +11,10 @@ from core import (
     ACCESS_TOKEN,
     REFRESH_TOKEN,
     Security,
+    settings,
 )
+
+from faststream import Header
 
 
 async def authenticate_user(
@@ -53,3 +56,8 @@ def check_user_is_admin(
     if not employee.is_admin:
         raise FORBIDDEN_EXC_NOT_ENOUGH_RIGHTS
     return True
+
+
+async def verify_tg_request(authorization: Annotated[str, Header()]):
+    if authorization != f"Bearer {settings.jwt.tg_api_secret}":
+        raise HTTPException(status_code=403, detail="Not allowed")

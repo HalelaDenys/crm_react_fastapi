@@ -6,7 +6,7 @@ authors = [
     {name = "_Avvake_",email = "denisergo18@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<4.0"
 dependencies = [
     "fastapi[all] (>=0.115.12,<0.116.0)",
     "uvicorn (>=0.34.3,<0.35.0)",
@@ -17,6 +17,7 @@ dependencies = [
     "greenlet (>=3.2.3,<3.3.0)",
     "python-jose (>=3.5.0,<3.6.0)",
     "bcrypt (>=4.3.0,<4.4.0)",
+    "faststream[rabbit] (>=0.5.48,<0.6.0)",
 ]
 
 [tool.poetry]

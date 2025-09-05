@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import BaseModel
+from pydantic import BaseModel, AmqpDsn
 from typing import ClassVar
 from pathlib import Path
 from datetime import time, timedelta
@@ -17,6 +17,7 @@ class APIPrefix(BaseModel):
     categories: str = "/categories"
     services: str = "/services"
     booking: str = "/booking"
+    tg_users: str = "/tg-users"
 
 
 class DBConfig(BaseModel):
@@ -53,6 +54,7 @@ class AUTHConfig(BaseModel):
     secret_key: str
     access_expire_day: int
     refresh_expire_day: int
+    tg_api_secret: str
     algorithm: str = "HS256"
 
 
@@ -60,6 +62,10 @@ class BookingConfig(BaseModel):
     work_start: time = time(9, 0)
     work_end: time = time(18, 0)
     buffer: timedelta = timedelta(minutes=15)
+
+
+class FastStreamConfig(BaseModel):
+    rabbit_url: AmqpDsn = "amqp://guest:guest@localhost:5672/"
 
 
 class Settings(BaseSettings):
@@ -74,6 +80,7 @@ class Settings(BaseSettings):
     jwt: AUTHConfig
     api_prefix: APIPrefix = APIPrefix()
     booking: BookingConfig = BookingConfig()
+    fs: FastStreamConfig = FastStreamConfig()
 
 
 settings = Settings()
