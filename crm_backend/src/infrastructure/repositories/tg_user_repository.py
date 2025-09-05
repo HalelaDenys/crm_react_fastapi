@@ -1,5 +1,5 @@
 from infrastructure.repositories.sqlalchemy_repository import SQLAlchemyRepository
-from infrastructure.db.models.tg_user import TgUser
+from infrastructure.db.models.tg_users import TgUser
 from sqlalchemy.ext.asyncio import AsyncSession
 
 

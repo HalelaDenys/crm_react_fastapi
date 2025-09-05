@@ -17,6 +17,8 @@ class TgUser(Base):
     last_name: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
     username: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
 
+    is_active: Mapped[bool] = mapped_column(default=True)
+
     bookings: Mapped[list["Booking"]] = relationship(
         "Booking", back_populates="tg_user"
     )
@@ -26,5 +28,6 @@ class TgUser(Base):
             f"{self.__class__.__name__}(id={self.id}, telegram_id={self.telegram_id}, "
             f"phone_number={self.phone_number}, first_name={self.first_name}, "
             f"last_name={self.last_name}, username={self.username}, "
+            f"is_active={self.is_active})"
             f"created_at={self.created_at}, updated_at={self.updated_at})"
         )

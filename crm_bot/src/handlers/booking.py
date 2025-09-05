@@ -30,7 +30,6 @@ async def create_booking(call: CallbackQuery, state: FSMContext):
         reply_markup=inline_keyboard_builder(categories_list, back_cb="start"),
     )
 
-
 @router.callback_query(F.data.startswith("category:"))
 async def get_category(call: CallbackQuery, state: FSMContext):
     category_id = int(call.data.split(":")[1])

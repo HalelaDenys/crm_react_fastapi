@@ -1,6 +1,5 @@
 import re
 from datetime import datetime
-
 from schemas.base_schema import BaseSchema
 from pydantic import Field, field_validator
 from typing import Annotated, Optional, Literal
@@ -65,3 +64,29 @@ class FilterParamsSchema(BaseSchema):
     sort_order: Annotated[Literal["asc", "desc"], Field(description="sort order")] = (
         "desc"
     )
+
+
+class TgUserSchema(BaseSchema):
+    telegram_id: Annotated[int, Field(description="User telegram id")]
+    phone_number: Annotated[str, Field(description="Phone number")]
+    first_name: Annotated[
+        Optional[str], Field(description="First name", max_length=50)
+    ] = None
+    last_name: Annotated[
+        Optional[str], Field(description="Last name", max_length=50)
+    ] = None
+    username: Annotated[Optional[str], Field(description="Username", max_length=50)] = (
+        None
+    )
+
+    @field_validator("phone_number")
+    def validate_phone_number(cls, value: str) -> str:
+        if not re.match(r"^\+\d{5,15}$", value):
+            raise ValueError("Phone number must be entered in the format: +999999999")
+        return value
+
+
+class ReadTgUserSchema(TgUserSchema):
+    id: int
+    is_active: bool
+    created_at: datetime

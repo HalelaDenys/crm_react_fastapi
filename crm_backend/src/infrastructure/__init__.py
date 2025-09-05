@@ -20,7 +20,7 @@ __all__ = [
 from infrastructure.db.db_helper import db_helper
 from infrastructure.db.models.base import Base
 from infrastructure.db.models.users import User
-from infrastructure.db.models.tg_user import TgUser
+from infrastructure.db.models.tg_users import TgUser
 from infrastructure.db.models.service import Service
 from infrastructure.db.models.booking import Booking
 from infrastructure.db.models.position import Position

@@ -15,6 +15,7 @@ from infrastructure import (
     BookingRepository,
     ServiceRepository,
     Service,
+    TgUserRepository,
 )
 from core import settings
 
@@ -23,11 +24,16 @@ class BookingService(BaseService):
     def __init__(self, session: AsyncSession):
         self._booking_repository = BookingRepository(session)
         self._service_repository = ServiceRepository(session)
+        self._tg_user_repository = TgUserRepository(session)
 
     async def add(self, data: CreateBookingResponseSchema) -> Booking:
-        service: "Service" = await self._service_repository.find_single(
+        # check service
+        if not (service :=  await self._service_repository.find_single(
             id=data.service_id
-        )
+        )):
+            raise NotFoundError("Service not found")
+
+        # check if the booking time is available
         if await self._booking_repository.find_single(
             start_time=data.start_time,
         ):
