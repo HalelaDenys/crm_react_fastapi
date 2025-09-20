@@ -40,3 +40,4 @@ info.txt
 #certs/
 logs/
 /src/logs/
+/src/create_superuser.py
