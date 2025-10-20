@@ -10,7 +10,7 @@ from core import settings
 router = APIRouter(prefix=settings.api_prefix.tg_users, tags=["Tg Users"])
 
 
-@router.get("", status_code=200)
+@router.post("", status_code=200)
 async def create_tg_users(
     user_data: TgUserSchema,
     is_admin: Annotated[bool, Depends(check_user_is_admin)],

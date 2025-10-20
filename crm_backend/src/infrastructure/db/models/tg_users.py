@@ -11,7 +11,7 @@ class TgUser(Base):
     __tablename__ = "tg_users"
 
     telegram_id: Mapped[int] = mapped_column(unique=True, nullable=False)
-    phone_number: Mapped[str] = mapped_column(VARCHAR(15), nullable=False, unique=True)
+    phone_number: Mapped[str] = mapped_column(VARCHAR(15), nullable=True, unique=True)
 
     first_name: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
     last_name: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
