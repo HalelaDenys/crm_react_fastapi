@@ -6,14 +6,15 @@ authors = [
     {name = "_Avvake_",email = "denisergo18@gmail.com"}
 ]
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.11,<4.0"
 dependencies = [
     "aiogram (>=3.21.0,<4.0.0)",
     "pydantic (>=2.11.7,<3.0.0)",
     "pydantic-settings (>=2.10.1,<3.0.0)",
     "httpx (>=0.28.1,<0.29.0)",
     "uvicorn (>=0.35.0,<0.36.0)",
-    "aiogram-calendar (>=0.6.0,<0.7.0)"
+    "aiogram-calendar (>=0.6.0,<0.7.0)",
+    "faststream[rabbit] (>=0.6.2,<0.7.0)",
 ]
 
 [tool.poetry.group.dev.dependencies]
