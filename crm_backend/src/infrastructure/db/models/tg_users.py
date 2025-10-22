@@ -1,6 +1,6 @@
 from infrastructure import Base
 from sqlalchemy.orm import Mapped, mapped_column, relationship
-from sqlalchemy import VARCHAR
+from sqlalchemy import VARCHAR, BIGINT
 from typing import Optional, TYPE_CHECKING
 
 if TYPE_CHECKING:
@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 class TgUser(Base):
     __tablename__ = "tg_users"
 
-    telegram_id: Mapped[int] = mapped_column(unique=True, nullable=False)
+    telegram_id: Mapped[int] = mapped_column(BIGINT, unique=True, nullable=False)
     phone_number: Mapped[str] = mapped_column(VARCHAR(15), nullable=True, unique=True)
 
     first_name: Mapped[Optional[str]] = mapped_column(VARCHAR(50), nullable=True)
