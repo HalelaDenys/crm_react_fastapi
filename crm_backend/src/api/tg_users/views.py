@@ -19,7 +19,7 @@ async def create_tg_users(
     Created for testing purposes
     """
     await broker.publish(
-        user_data,
+        user_data.model_dump(),
         queue="tg_users.created",
         headers={"authorization": f"Bearer {settings.jwt.tg_api_secret}"},
     )
