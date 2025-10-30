@@ -28,7 +28,7 @@ class RegisterUserMiddleware(BaseMiddleware):
         )
 
         try:
-            logging.info(f"Publishing {user_data.model_dump()}")
+            logging.info(f"Publishing %s", user_data)
             await broker.publish(
                 user_data.model_dump(),
                 queue="tg_users.created",
@@ -39,10 +39,4 @@ class RegisterUserMiddleware(BaseMiddleware):
         except FastStreamException as e:
             logging.error("Failed to publish message: %s", e)
 
-        # await broker.publish(
-        #     user_data,
-        #     queue="tg_users.created",
-        #     exchange="tg_users.created",
-        #     headers={"authorization": f"Bearer {settings.fs.tg_api_secret}"},
-        # )
         return await handler(event, data)

@@ -1,5 +1,6 @@
 from core.base_client import APIClient
 from core import settings
+from core.entities import RegisterUserSchema
 
 
 class ServiceAPI(APIClient):
@@ -32,13 +33,6 @@ class ServiceAPI(APIClient):
             }
             for service in services
         ]
-
-    async def add_booking(self, booking_data: dict) -> None:
-        await self.post(
-            f"/booking",
-            data=booking_data,
-        )
-        return
 
 
 api = ServiceAPI(base_url=settings.api.base_url)

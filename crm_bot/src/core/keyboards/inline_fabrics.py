@@ -30,5 +30,9 @@ def inline_back_button(
     return InlineKeyboardButton(text=back_text, callback_data=back_cb)
 
 
-def inline_menu_button():
-    return InlineKeyboardButton(text="Повернутися до меню", callback_data="start")
+def inline_menu_button() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text="Повернутися до меню", callback_data="start")]
+        ]
+    )
