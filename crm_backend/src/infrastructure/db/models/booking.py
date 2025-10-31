@@ -15,8 +15,8 @@ class Booking(Base):
         ForeignKey("services.id", ondelete="CASCADE"), primary_key=True
     )
     booking_date: Mapped[date] = mapped_column(Date, nullable=False)
-    start_date: Mapped[time] = mapped_column(Time, nullable=False)
-    end_date: Mapped[time] = mapped_column(Time, nullable=False)
+    start_time: Mapped[time] = mapped_column(Time, nullable=False)
+    end_time: Mapped[time] = mapped_column(Time, nullable=False)
 
     user_id: Mapped[Optional[int]] = mapped_column(
         ForeignKey("users.id", ondelete="SET DEFAULT"), nullable=True, default=None
