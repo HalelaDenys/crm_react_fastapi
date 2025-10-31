@@ -83,3 +83,19 @@ class ReadTgUserSchema(TgUserSchema):
     id: int
     is_active: bool
     created_at: datetime
+
+
+class UpdatePhoneNumberTgUserSchema(BaseSchema):
+    phone_number: Annotated[
+        str, Field(min_length=5, max_length=20, description="Phone number")
+    ]
+
+    @field_validator("phone_number")
+    def validate_phone_number(cls, value: str) -> str:
+
+        if not value.startswith("+"):
+            value = f"+{value}"
+
+        if not re.match(r"^\+\d{5,15}$", value):
+            raise ValueError("Phone number must be entered in the format: +999999999")
+        return value

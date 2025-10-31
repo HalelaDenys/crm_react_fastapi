@@ -15,7 +15,7 @@ class BookingRepository(SQLAlchemyRepository[Booking]):
         stmt = (
             select(self._model)
             .where(self._model.booking_date == booking_date)
-            .order_by(self._model.start_date)
+            .order_by(self._model.start_time)
         )
         result = await self._session.execute(stmt)
         return result.scalars().all()

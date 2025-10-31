@@ -1,3 +1,4 @@
+from schemas.user_schema import UpdatePhoneNumberTgUserSchema
 from core.exceptions import NotFoundError, AlreadyExistsError
 from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import timedelta, datetime, date
@@ -7,6 +8,7 @@ from schemas.booking_schema import (
     CreateBookingResponseSchema,
     ReadBookingShema,
     CreateBookingSchema,
+    RegisterNewBookingSchema,
 )
 from typing import AsyncGenerator
 from infrastructure import (
@@ -28,9 +30,9 @@ class BookingService(BaseService):
 
     async def add(self, data: CreateBookingResponseSchema) -> Booking:
         # check service
-        if not (service :=  await self._service_repository.find_single(
-            id=data.service_id
-        )):
+        if not (
+            service := await self._service_repository.find_single(id=data.service_id)
+        ):
             raise NotFoundError("Service not found")
 
         # check if the booking time is available
@@ -42,7 +44,7 @@ class BookingService(BaseService):
             )
 
         booking_data = CreateBookingSchema(**data.model_dump())
-        booking_data.end_date = (
+        booking_data.end_time = (
             (
                 datetime.combine(datetime.today(), data.start_time)
                 + timedelta(minutes=service.duration_minutes)
@@ -50,10 +52,9 @@ class BookingService(BaseService):
             + settings.booking.buffer
         ).time()
 
-        if booking_data.user_id is not None:  # якщо дуло створенно менеджером
-            booking_data.is_verified = True
+        new_booking_data = await self.__user_verification(booking_data)
 
-        return await self._booking_repository.create(data=booking_data)
+        return await self._booking_repository.create(data=new_booking_data)
 
     async def update(self, **kwargs):
         pass
@@ -99,10 +100,10 @@ class BookingService(BaseService):
 
             for b in bookings:
                 b_start = datetime.combine(
-                    datetime.fromisoformat(booking_date), b.start_date
+                    datetime.fromisoformat(booking_date), b.start_time
                 )
                 b_end = datetime.combine(
-                    datetime.fromisoformat(booking_date), b.end_date
+                    datetime.fromisoformat(booking_date), b.end_time
                 )
                 if slot_start < b_end and slot_end > b_start:
                     overlap = True
@@ -119,6 +120,35 @@ class BookingService(BaseService):
             work_start += duration_service_minutes + settings.booking.buffer
 
         return slots
+
+    async def __user_verification(
+        self, booking_data: CreateBookingSchema
+    ) -> RegisterNewBookingSchema:
+        if booking_data.user_id is not None:  # якщо дуло створенно менеджером
+            booking_data.is_verified = True
+
+        if booking_data.telegram_id is not None:  # якщо дуло створенно через телеграм
+            tg_user = await self._tg_user_repository.find_single(
+                telegram_id=booking_data.telegram_id
+            )
+
+            if tg_user.phone_number is None and booking_data.phone_number is not None:
+                await self._tg_user_repository.update(
+                    data=UpdatePhoneNumberTgUserSchema(
+                        phone_number=booking_data.phone_number
+                    ),
+                    telegram_id=booking_data.telegram_id,
+                )
+
+        return RegisterNewBookingSchema(
+            service_id=booking_data.service_id,
+            booking_date=booking_data.booking_date,
+            start_time=booking_data.start_time,
+            end_time=booking_data.end_time,
+            user_id=booking_data.user_id,
+            tg_user_id=tg_user.id,
+            is_verified=booking_data.is_verified,
+        )
 
 
 async def get_booking_service() -> AsyncGenerator["BookingService", None]:
