@@ -1,7 +1,7 @@
 from schemas.user_schema import UpdatePhoneNumberTgUserSchema
 from core.exceptions import NotFoundError, AlreadyExistsError
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import timedelta, datetime, date
+from datetime import timedelta, datetime, date, time
 from services.base_service import BaseService
 from schemas.booking_schema import (
     ReadAvailableDateBookingSchema,
@@ -78,36 +78,32 @@ class BookingService(BaseService):
     async def get_available_slots(
         self, service_id: int, booking_date: str
     ) -> list[ReadAvailableDateBookingSchema] | None:
-        slots = []
+        slots: list[ReadAvailableDateBookingSchema] = []
+        booking_dt = datetime.fromisoformat(booking_date).date()
+        now = datetime.now()
+
         service: "Service" = await self._service_repository.find_single(id=service_id)
         duration_service_minutes = timedelta(minutes=service.duration_minutes)
+        buffer = settings.booking.buffer
 
-        work_start = datetime.combine(
-            datetime.fromisoformat(booking_date), settings.booking.work_start
-        )
-        work_end = datetime.combine(
-            datetime.fromisoformat(booking_date), settings.booking.work_end
-        )
-        bookings = await self._booking_repository.find_all(
-            booking_date=datetime.fromisoformat(booking_date)
-        )
+        work_start = datetime.combine(booking_dt, settings.booking.work_start)
+        work_end = datetime.combine(booking_dt, settings.booking.work_end)
+
+        if booking_dt == now.date():
+            current_time = now.replace(minute=0, second=0, microsecond=0)
+            work_start = max(current_time, work_start)  # не раніше 09:00
+
+        bookings = await self._booking_repository.find_all(booking_date=booking_dt)
 
         while (work_start + duration_service_minutes) <= work_end:
             slot_start = work_start
-            slot_end = (work_start + duration_service_minutes) + settings.booking.buffer
+            slot_end = work_start + duration_service_minutes + buffer
 
-            overlap = False
-
-            for b in bookings:
-                b_start = datetime.combine(
-                    datetime.fromisoformat(booking_date), b.start_time
-                )
-                b_end = datetime.combine(
-                    datetime.fromisoformat(booking_date), b.end_time
-                )
-                if slot_start < b_end and slot_end > b_start:
-                    overlap = True
-                    break
+            overlap = any(
+                slot_start < datetime.combine(booking_dt, b.end_time)
+                and slot_end > datetime.combine(booking_dt, b.start_time)
+                for b in bookings
+            )
 
             if not overlap:
                 slots.append(

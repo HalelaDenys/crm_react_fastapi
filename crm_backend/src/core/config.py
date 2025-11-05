@@ -60,7 +60,7 @@ class AUTHConfig(BaseModel):
 
 class BookingConfig(BaseModel):
     work_start: time = time(9, 0)
-    work_end: time = time(18, 0)
+    work_end: time = time(19, 0)
     buffer: timedelta = timedelta(minutes=15)
 
 
