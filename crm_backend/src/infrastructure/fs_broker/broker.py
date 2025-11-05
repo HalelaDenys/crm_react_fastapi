@@ -2,6 +2,7 @@ from faststream.rabbit import RabbitBroker
 from core import settings
 from faststream import FastStream
 from infrastructure.fs_broker.router.tg_user_router import tg_user_router
+from infrastructure.fs_broker.router.booking_router import booking_router
 
 # ініціалізація брокера
 broker = RabbitBroker(
@@ -12,4 +13,7 @@ broker = RabbitBroker(
 fs_app = FastStream(broker)
 
 # підключаємо маршрутизатор до app
-broker.include_router(tg_user_router)
+broker.include_routers(
+    tg_user_router,
+    booking_router,
+)
