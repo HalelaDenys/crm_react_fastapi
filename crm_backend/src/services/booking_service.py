@@ -36,8 +36,8 @@ class BookingService(BaseService):
             raise NotFoundError("Service not found")
 
         # check if the booking time is available
-        if await self._booking_repository.find_single(
-            start_time=data.start_time,
+        if await self._booking_repository.access_check_reservation(
+            booking_date=data.booking_date, start_time=data.start_time
         ):
             raise AlreadyExistsError(
                 f"Booking with start date {data.start_time} already exists"
