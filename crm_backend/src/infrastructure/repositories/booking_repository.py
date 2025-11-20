@@ -19,3 +19,13 @@ class BookingRepository(SQLAlchemyRepository[Booking]):
         )
         result = await self._session.execute(stmt)
         return result.scalars().all()
+
+    async def access_check_reservation(
+        self, booking_date: date, start_time: time
+    ) -> Union[Booking, None]:
+        stmt = select(self._model).where(
+            self._model.booking_date == booking_date,
+            self._model.start_time == start_time,
+        )
+        result = await self._session.execute(stmt)
+        return result.scalar_one_or_none()
