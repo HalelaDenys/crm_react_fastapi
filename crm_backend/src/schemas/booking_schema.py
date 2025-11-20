@@ -73,3 +73,10 @@ class RegisterNewBookingSchema(BaseSchema):
     is_verified: Annotated[
         Optional[bool], Field(description="Booking confirmation")
     ] = False
+
+
+class BookingConfirmNotificationSchema(BaseSchema):
+    tg_user_id: int
+    text: str
+    booking_date: str
+    start_time: str

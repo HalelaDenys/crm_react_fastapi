@@ -11,8 +11,8 @@ tg_user_router = RabbitRouter()
 
 
 @tg_user_router.subscriber(
-    "tg_users.created",
-    exchange="tg_users.created",
+    queue="tg_users.created",
+    # exchange="tg_users.created",
 )
 async def create_tg_user(
     user_data: TgUserSchema,
