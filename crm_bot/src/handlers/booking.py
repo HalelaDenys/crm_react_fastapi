@@ -92,7 +92,6 @@ async def get_the_date_from_the_calendar(
         locale=await get_user_locale(call.from_user), show_alerts=True
     )
     selected, date = await calendar.process_selection(call, callback_data)
-
     if selected:
         await state.update_data(booking_date=date.strftime("%Y-%m-%d"))
         await state.set_state(BookingStateForm.start_time)
@@ -153,9 +152,8 @@ async def save_contact(message: Message, state: FSMContext):
     try:
         logging.info(f"Publishing booking_data")
         await broker.publish(
-            booking_data.model_dump(),
+            booking_data.model_dump(mode="json"),
             queue="booking.created",
-            exchange="booking.created",
             headers={"authorization": f"Bearer {settings.fs.tg_api_secret}"},
         )
         logging.info("Published successfully")

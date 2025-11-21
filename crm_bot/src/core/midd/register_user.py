@@ -32,7 +32,6 @@ class RegisterUserMiddleware(BaseMiddleware):
             await broker.publish(
                 user_data.model_dump(),
                 queue="tg_users.created",
-                exchange="tg_users.created",
                 headers={"authorization": f"Bearer {settings.fs.tg_api_secret}"},
             )
             logging.info("Published successfully")

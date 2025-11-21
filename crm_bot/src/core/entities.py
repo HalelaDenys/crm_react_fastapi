@@ -18,3 +18,10 @@ class RegisterUserSchema(BaseModel):
     username: Optional[str] = None
 
     # model_config = ConfigDict(from_attributes=True)
+
+
+class BookingConfirmNotificationSchema(BaseModel):
+    tg_user_id: int
+    text: str
+    booking_date: str
+    start_time: str

@@ -3,4 +3,4 @@ __all__ = [
 ]
 
 
-from .fs_broker.broker import broker
+from .fs_broker.broker import broker, app

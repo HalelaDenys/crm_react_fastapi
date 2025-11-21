@@ -8,7 +8,6 @@ from core.midd import RegisterUserMiddleware
 
 from infrastructure.fs_broker.broker import broker
 
-# import asyncio
 import logging
 
 logger = logging.getLogger(__name__)
@@ -26,12 +25,7 @@ async def main_bot():
     dp.include_router(main_router())
     dp.message.middleware(RegisterUserMiddleware())
 
-    # # Запускаємо обидва в паралельних тасках
-    # bot_task = asyncio.create_task(dp.start_polling(bot))
-    # fs_task = asyncio.create_task(app.run())
-    #
-    # # Чекаємо на завершення будь-якого з них (зазвичай вони обидва безкінечні)
-    # await asyncio.gather(bot_task, fs_task)
+    broker.context.set_global("bot", bot)
 
     await broker.start()
     logging.info("🐇 Broker started")
