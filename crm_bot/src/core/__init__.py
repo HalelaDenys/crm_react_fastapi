@@ -5,6 +5,7 @@ __all__ = (
     "BookingStateForm",
     "inline_back_button",
     "inline_menu_button",
+    "AuthError",
 )
 
 from .config import settings
@@ -15,3 +16,4 @@ from .keyboards.inline_fabrics import (
 )
 from .states import BookingStateForm
 from .service_api import api
+from .exp import AuthError

@@ -2,7 +2,7 @@ from aiogram.types import CallbackQuery, Message, ReplyKeyboardRemove
 from core.keyboards.keyboard_btns import phone_number_kb
 from aiogram.filters.callback_data import CallbackData
 from faststream.exceptions import FastStreamException
-from core.entities import CreateBookingSchema
+from core.entities import CreateBookingSchema, IsVerifiedBookingSchema
 from aiogram.fsm.context import FSMContext
 from infrastructure import broker
 from core import (
@@ -166,3 +166,34 @@ async def save_contact(message: Message, state: FSMContext):
     )
 
     await thank_msg.delete()
+
+
+@router.callback_query(F.data.regexp(r"^(confirm_booking|cancel_booking)"))
+async def confirm_booking(call: CallbackQuery):
+    data = call.data.split(":")
+    is_verified = data[0] == "confirm_booking"
+
+    booking_date = IsVerifiedBookingSchema(
+        booking_id=int(data[1]),
+        is_verified=is_verified,
+    )
+    try:
+        await broker.publish(
+            booking_date.model_dump(mode="json"),
+            queue="booking.verified",
+            headers={"authorization": f"Bearer {settings.fs.tg_api_secret}"},
+        )
+        logging.info("Published successfully")
+
+    except FastStreamException as e:
+        logging.error("Failed to publish message: %s", e)
+
+    text = (
+        "Підтвердженно бронювання в обробці."
+        if is_verified
+        else "Відмінна бронювання в обробці."
+    )
+
+    await call.message.edit_text(
+        f"{text}",
+    )

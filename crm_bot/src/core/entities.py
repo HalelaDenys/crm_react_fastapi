@@ -21,7 +21,13 @@ class RegisterUserSchema(BaseModel):
 
 
 class BookingConfirmNotificationSchema(BaseModel):
+    booking_id: int
     tg_user_id: int
     text: str
     booking_date: str
     start_time: str
+
+
+class IsVerifiedBookingSchema(BaseModel):
+    booking_id: int
+    is_verified: bool
