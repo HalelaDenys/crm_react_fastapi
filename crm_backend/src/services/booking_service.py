@@ -7,8 +7,10 @@ from schemas.booking_schema import (
     ReadAvailableDateBookingSchema,
     CreateBookingResponseSchema,
     ReadBookingShema,
-    CreateBookingSchema,
+    IsVerifiedBookingResponseSchema,
     RegisterNewBookingSchema,
+    CreateBookingSchema,
+    UpdateIsVerifiedSchema,
 )
 from typing import AsyncGenerator
 from infrastructure import (
@@ -56,8 +58,18 @@ class BookingService(BaseService):
 
         return await self._booking_repository.create(data=new_booking_data)
 
-    async def update(self, **kwargs):
-        pass
+    async def update(
+        self, booking_id: int, data: IsVerifiedBookingResponseSchema
+    ) -> None | Booking:
+        await self.get(id=booking_id)
+
+        if not data.is_verified:
+            await self.delete(booking_id=booking_id)
+            return None
+
+        return await self._booking_repository.update(
+            id=booking_id, data=UpdateIsVerifiedSchema(is_verified=data.is_verified)
+        )
 
     async def delete(self, booking_id: int) -> None:
         await self.get(id=booking_id)

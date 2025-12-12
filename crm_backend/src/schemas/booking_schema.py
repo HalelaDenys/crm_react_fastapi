@@ -76,7 +76,17 @@ class RegisterNewBookingSchema(BaseSchema):
 
 
 class BookingConfirmNotificationSchema(BaseSchema):
+    booking_id: int
     tg_user_id: int
     text: str
     booking_date: str
     start_time: str
+
+
+class IsVerifiedBookingResponseSchema(BaseSchema):
+    booking_id: int
+    is_verified: bool
+
+
+class UpdateIsVerifiedSchema(BaseSchema):
+    is_verified: bool
