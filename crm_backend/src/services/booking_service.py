@@ -11,6 +11,7 @@ from schemas.booking_schema import (
     RegisterNewBookingSchema,
     CreateBookingSchema,
     UpdateIsVerifiedSchema,
+    QoeryBookingAllByUserSchema,
 )
 from typing import AsyncGenerator
 from infrastructure import (
@@ -105,7 +106,9 @@ class BookingService(BaseService):
             current_time = now.replace(minute=0, second=0, microsecond=0)
             work_start = max(current_time, work_start)  # не раніше 09:00
 
-        bookings = await self._booking_repository.find_all(booking_date=booking_dt)
+        bookings = await self._booking_repository.find_all_by_booking_date(
+            booking_date=booking_dt
+        )
 
         while (work_start + duration_service_minutes) <= work_end:
             slot_start = work_start
@@ -157,6 +160,14 @@ class BookingService(BaseService):
             tg_user_id=tg_user.id,
             is_verified=booking_data.is_verified,
         )
+
+    async def get_all_bookings_by_user(
+        self, q_data: QoeryBookingAllByUserSchema
+    ) -> list[ReadBookingShema]:
+        bookings = await self._booking_repository.find_all_bookings_by_user(
+            telegram_id=q_data.telegram_id, user_id=q_data.user_id
+        )
+        return [ReadBookingShema(**booking.to_dict()) for booking in bookings]
 
 
 async def get_booking_service() -> AsyncGenerator["BookingService", None]:

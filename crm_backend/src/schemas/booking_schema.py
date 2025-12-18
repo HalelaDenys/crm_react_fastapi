@@ -90,3 +90,10 @@ class IsVerifiedBookingResponseSchema(BaseSchema):
 
 class UpdateIsVerifiedSchema(BaseSchema):
     is_verified: bool
+
+
+class QoeryBookingAllByUserSchema(BaseSchema):
+    user_id: Annotated[Optional[int], Field(ge=0, description="Сгккуте user ID")] = None
+    telegram_id: Annotated[
+        Optional[int], Field(ge=0, description="Telegram user ID")
+    ] = None

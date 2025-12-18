@@ -4,6 +4,7 @@ from fastapi import APIRouter, Query, Depends, status, Path
 from schemas.booking_schema import (
     ReadAvailableDateBookingSchema,
     CreateBookingResponseSchema,
+    QoeryBookingAllByUserSchema,
     ReadBookingShema,
 )
 from typing import Annotated
@@ -49,3 +50,11 @@ async def delete_booking(
 ) -> None:
     await booking_service.delete(booking_id=booking_id)
     return
+
+
+@router.get("", status_code=status.HTTP_200_OK)
+async def get_bookings(
+    q: Annotated[QoeryBookingAllByUserSchema, Query()],
+    booking_service: Annotated["BookingService", Depends(get_booking_service)],
+) -> list[ReadBookingShema]:
+    return await booking_service.get_all_bookings_by_user(q_data=q)
