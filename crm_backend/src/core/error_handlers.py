@@ -29,7 +29,8 @@ def register_error_handlers(app: FastAPI) -> None:
         return ORJSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
-                "message": "There was an unforeseen error. Our administrators are already working on it."
+                "message": "There was an unforeseen error. "
+                "Our administrators are already working on it."
             },
         )
 
@@ -41,6 +42,7 @@ def register_error_handlers(app: FastAPI) -> None:
         return ORJSONResponse(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             content={
-                "message": "There was an unforeseen error. Our administrators are already working on it."
+                "message": "There was an unforeseen error. "
+                "Our administrators are already working on it."
             },
         )

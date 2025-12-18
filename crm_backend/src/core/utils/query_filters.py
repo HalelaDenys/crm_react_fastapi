@@ -16,9 +16,9 @@ def query_filters(
 ) -> Select:
     # Filtering by status
     if status == "is_active":
-        stmt = stmt.where(model.is_active == True)
+        stmt = stmt.where(model.is_active.is_(True))
     elif status == "is_inactive":
-        stmt = stmt.where(model.is_active == False)
+        stmt = stmt.where(model.is_active.is_(False))
 
     # Filtering by search
     if search:

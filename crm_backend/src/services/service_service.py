@@ -1,4 +1,4 @@
-from infrastructure import db_helper, CategoryRepository, Service
+from infrastructure import db_helper, Service
 from core.exceptions import NotFoundError, AlreadyExistsError
 from sqlalchemy.ext.asyncio import AsyncSession
 

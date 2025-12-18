@@ -1,5 +1,3 @@
-from fastapi import HTTPException
-
 from infrastructure.repositories.sqlalchemy_repository import SQLAlchemyRepository
 from sqlalchemy.ext.asyncio.session import AsyncSession
 from typing import Union, Sequence

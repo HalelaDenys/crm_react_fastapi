@@ -1,4 +1,4 @@
-from infrastructure.fs_broker.broker import broker, fs_app
+from infrastructure.fs_broker.broker import broker
 from infrastructure.fs_broker.router.booking_router import booking_router
 
 

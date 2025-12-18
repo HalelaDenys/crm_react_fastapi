@@ -9,7 +9,6 @@ from schemas.booking_schema import (
 from faststream.rabbit import RabbitRouter
 from faststream import Depends
 from typing import Annotated
-from core import settings
 from ..broker import broker
 
 booking_router = RabbitRouter()

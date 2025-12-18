@@ -36,7 +36,8 @@ class Service(Base):
 
     def __repr__(self) -> str:
         return (
-            f"{self.__class__.__name__}(id={self.id}, name={self.name}, duration_minutes={self.duration_minutes}, "
+            f"{self.__class__.__name__}(id={self.id}, name={self.name}, "
+            f"duration_minutes={self.duration_minutes}, "
             f"price={self.price}, category_id={self.category_id}),"
             f"created_at={self.created_at}, updated_at={self.updated_at})"
         )

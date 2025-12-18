@@ -1,7 +1,7 @@
 from schemas.user_schema import UpdatePhoneNumberTgUserSchema
 from core.exceptions import NotFoundError, AlreadyExistsError
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import timedelta, datetime, date, time
+from datetime import timedelta, datetime, date
 from services.base_service import BaseService
 from schemas.booking_schema import (
     ReadAvailableDateBookingSchema,
