@@ -20,8 +20,6 @@ dependencies = [
     "faststream[rabbit] (>=0.5.48,<0.6.0)",
 ]
 
-[tool.poetry]
-packages = [{include = "src"}]
 
 [tool.poetry.group.dev.dependencies]
 black = "^25.1.0"
