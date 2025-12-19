@@ -18,7 +18,8 @@ async def booking_confirm_notification(
 ):
     await bot.send_message(
         chat_id=notification_date.tg_user_id,
-        text=f"Підтвердіть бронювання на {notification_date.booking_date}, {notification_date.start_time}",
+        text=f"Підтвердіть бронювання на {notification_date.booking_date}, "
+        f"{notification_date.start_time}",
         reply_markup=inline_keyboard_builder(
             buttons=[
                 {

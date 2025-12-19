@@ -28,7 +28,7 @@ class RegisterUserMiddleware(BaseMiddleware):
         )
 
         try:
-            logging.info(f"Publishing %s", user_data)
+            logging.info("Publishing %s", user_data)
             await broker.publish(
                 user_data.model_dump(),
                 queue="tg_users.created",

@@ -1,5 +1,4 @@
 from aiogram.types import KeyboardButton, ReplyKeyboardMarkup
-from aiogram.utils.keyboard import ReplyKeyboardBuilder
 
 
 phone_number_kb = ReplyKeyboardMarkup(

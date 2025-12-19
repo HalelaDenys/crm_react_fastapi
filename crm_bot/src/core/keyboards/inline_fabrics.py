@@ -6,7 +6,7 @@ def inline_keyboard_builder(
     buttons: list[dict[str, str]],
     sizes: int = 2,
     back_text: str = "Back",
-    back_cb: str = None,
+    back_cb: str | None = None,
 ) -> InlineKeyboardMarkup:
     if not buttons:
         raise ValueError("The list of buttons is empty")
@@ -14,7 +14,15 @@ def inline_keyboard_builder(
     builder = InlineKeyboardBuilder()
 
     for button in buttons:
-        builder.button(text=button.get("text"), callback_data=button.get("call"))
+        text = button.get("text")
+        call = button.get("call")
+
+        if text is None or call is None:
+            raise ValueError("Button must contain 'text' and 'call'")
+
+        builder.button(text=text, callback_data=call)
+
+        # builder.button(text=button.get("text"), callback_data=button.get("call"))
 
     builder.adjust(sizes)
 

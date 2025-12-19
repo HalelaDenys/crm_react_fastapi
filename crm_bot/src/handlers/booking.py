@@ -150,7 +150,7 @@ async def save_contact(message: Message, state: FSMContext):
     )
 
     try:
-        logging.info(f"Publishing booking_data")
+        logging.info("Publishing booking_data")
         await broker.publish(
             booking_data.model_dump(mode="json"),
             queue="booking.created",
@@ -189,7 +189,7 @@ async def confirm_booking(call: CallbackQuery):
         logging.error("Failed to publish message: %s", e)
 
     text = (
-        "Підтвердженно бронювання в обробці."
+        "Підтвердження бронювання в обробці."
         if is_verified
         else "Відмінна бронювання в обробці."
     )

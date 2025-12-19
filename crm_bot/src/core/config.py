@@ -12,9 +12,11 @@ class BotConfig(BaseModel):
 class ApiConfig(BaseSettings):
     base_url: str = "http://0.0.0.0:8000/api/v1"
 
+
 class FastStreamConfig(BaseModel):
     rabbit_url: AmqpDsn = "amqp://guest:guest@localhost:5672/"
     tg_api_secret: str
+
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(

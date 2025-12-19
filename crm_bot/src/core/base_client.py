@@ -1,5 +1,8 @@
 from httpx import AsyncClient, HTTPStatusError, RequestError
 from typing import Any
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class APIClient:
@@ -7,7 +10,7 @@ class APIClient:
         self.base_url = base_url.rstrip("/")
         self.token = token
 
-    async def get(self, path: str, params: dict | None = None) -> Any | dict | list:
+    async def get(self, path: str, params: dict | None = None) -> dict | list:
         headers = self._get_headers()
         try:
             async with AsyncClient(timeout=10) as client:
@@ -17,11 +20,15 @@ class APIClient:
                 response.raise_for_status()
                 return response.json()
         except HTTPStatusError as e:
-            print(f"HTTP помилка: {e.response.status_code} - {e.response.text}")
+            logger.error(
+                "HTTP помилка: %s - %s", e.response.status_code, e.response.text
+            )
+            raise
         except RequestError as e:
-            print(f"Помилка запиту: {e}")
+            logger.error("Помилка запиту: %s", e)
+            raise
 
-    async def post(self, path: str, data: dict) -> Any | dict | list:
+    async def post(self, path: str, data: dict) -> dict | list:
         headers = self._get_headers()
         try:
             async with AsyncClient(timeout=10) as client:
@@ -31,9 +38,13 @@ class APIClient:
                 response.raise_for_status()
                 return response.json()
         except HTTPStatusError as e:
-            print(f"HTTP помилка: {e.response.status_code} - {e.response.text}")
+            logger.error(
+                "HTTP помилка: %s - %s", e.response.status_code, e.response.text
+            )
+            raise
         except RequestError as e:
-            print(f"Помилка запиту: {e}")
+            logger.error("Помилка запиту: %s", e)
+            raise
 
     def _get_headers(self) -> dict[str, str]:
         headers = {"Content-Type": "application/json"}

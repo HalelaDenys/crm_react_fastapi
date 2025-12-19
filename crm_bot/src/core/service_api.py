@@ -1,6 +1,5 @@
 from core.base_client import APIClient
 from core import settings
-from core.entities import RegisterUserSchema
 
 
 class ServiceAPI(APIClient):
