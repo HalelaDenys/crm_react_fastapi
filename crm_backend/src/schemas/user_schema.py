@@ -24,7 +24,7 @@ class UserSchema(BaseSchema):
         return value
 
 
-class UpdateUserSchema(UserSchema):
+class UpdateUserSchema(BaseSchema):
     first_name: Annotated[
         Optional[str], Field(min_length=4, max_length=50, description="First name user")
     ] = None
@@ -35,6 +35,12 @@ class UpdateUserSchema(UserSchema):
         Optional[str], Field(min_length=5, max_length=20, description="Phone number")
     ] = None
     is_active: Optional[bool] = None
+
+    @field_validator("phone_number")
+    def validate_phone_number(cls, value: str) -> str:
+        if not re.match(r"^\+\d{5,15}$", value):
+            raise ValueError("Phone number must be entered in the format: +999999999")
+        return value
 
 
 class ReadUserSchema(UserSchema):

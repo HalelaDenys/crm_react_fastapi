@@ -14,3 +14,8 @@ class CreateServiceSchema(BaseSchema):
 class ReadServiceSchema(CreateServiceSchema):
     id: int
     created_at: datetime
+
+
+class ReadServiceSchemaPag(BaseSchema):
+    service_data: list[ReadServiceSchema]
+    hes_next: bool

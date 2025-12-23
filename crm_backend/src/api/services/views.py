@@ -1,6 +1,11 @@
-from schemas.service_shemas import CreateServiceSchema, ReadServiceSchema
+from schemas.base_schema import QPaginationSchema
+from schemas.service_shemas import (
+    CreateServiceSchema,
+    ReadServiceSchema,
+    ReadServiceSchemaPag,
+)
 from services.service_service import ServiceService, get_service
-from fastapi import Depends, APIRouter, status, Path
+from fastapi import Depends, APIRouter, status, Path, Query
 from core.dependencies.authorization import check_user_is_admin
 from core.config import settings
 from typing import Annotated
@@ -21,9 +26,12 @@ async def create_service(
 @router.get("/categories/{category_id}", status_code=status.HTTP_200_OK)
 async def get_services(
     category_id: Annotated[int, Path(ge=1)],
+    q: Annotated[QPaginationSchema, Query()],
     service_service: Annotated["ServiceService", Depends(get_service)],
-) -> list[ReadServiceSchema]:
-    services = await service_service.get_all(category_id)
+) -> ReadServiceSchemaPag:
+    services = await service_service.get_all(
+        category_id=category_id, limit=q.limit, page=q.page
+    )
     return services
 
 

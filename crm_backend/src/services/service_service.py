@@ -3,7 +3,11 @@ from core.exceptions import NotFoundError, AlreadyExistsError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from infrastructure.repositories.service_repository import ServiceRepository
-from schemas.service_shemas import CreateServiceSchema, ReadServiceSchema
+from schemas.service_shemas import (
+    CreateServiceSchema,
+    ReadServiceSchema,
+    ReadServiceSchemaPag,
+)
 from services.base_service import BaseService
 from typing import AsyncGenerator
 
@@ -30,9 +34,21 @@ class ServiceService(BaseService):
             raise NotFoundError("Service not found")
         return service
 
-    async def get_all(self, category_id) -> list[ReadServiceSchema]:
-        services = await self._service_repository.find_all(category_id=category_id)
-        return [ReadServiceSchema(**service.to_dict()) for service in services]
+    async def get_all(
+        self,
+        category_id,
+        limit: int,
+        page: int,
+    ) -> ReadServiceSchemaPag:
+
+        services, hes_next = await self._service_repository.find_all_pag(
+            category_id=category_id, limit=limit, page=page
+        )
+        service_data = [ReadServiceSchema(**service.to_dict()) for service in services]
+        return ReadServiceSchemaPag(
+            service_data=service_data,
+            hes_next=hes_next,
+        )
 
 
 async def get_service() -> AsyncGenerator["ServiceService", None]:
