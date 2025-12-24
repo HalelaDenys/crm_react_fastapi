@@ -1,5 +1,4 @@
 from httpx import AsyncClient, HTTPStatusError, RequestError
-from typing import Any
 import logging
 
 logger = logging.getLogger(__name__)

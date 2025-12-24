@@ -18,6 +18,10 @@ class FastStreamConfig(BaseModel):
     tg_api_secret: str
 
 
+class PaginationConfig(BaseSettings):
+    limit_service: int = 2
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",
@@ -29,6 +33,7 @@ class Settings(BaseSettings):
     bot: BotConfig
     api: ApiConfig = ApiConfig()
     fs: FastStreamConfig
+    pag: PaginationConfig
 
 
 settings = Settings()

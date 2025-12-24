@@ -41,7 +41,7 @@ async def create_booking(call: CallbackQuery, state: FSMContext):
     )
 
 
-# category:category_id:page
+# category:{category_id}:{page}
 @router.callback_query(F.data.startswith("category:"))
 async def get_category(call: CallbackQuery, state: FSMContext):
     """
@@ -53,14 +53,14 @@ async def get_category(call: CallbackQuery, state: FSMContext):
     await state.set_state(BookingStateForm.service_id)
 
     services_list, hes_next = await api.get_service_by_category(
-        category_id=category_id, page=int(page)
+        category_id=category_id,
+        page=int(page),
+        limit=settings.pag.limit_service,
     )
-
-    text = "Виберіть послугу" if services_list else "Більше послуг немає 👀"
 
     try:
         await call.message.edit_text(
-            text=text,
+            text="Виберіть послугу",
             reply_markup=inline_keyboard_builder_with_pagination(
                 buttons=services_list,
                 back_cb="create_booking",

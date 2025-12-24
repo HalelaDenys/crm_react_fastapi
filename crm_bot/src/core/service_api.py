@@ -29,7 +29,8 @@ class ServiceAPI(APIClient):
 
     async def get_available_slots(self, service_id: int, booking_date: str) -> list:
         services = await self.get(
-            f"/booking/services/{service_id}/available-slots?booking_date={booking_date}",
+            f"/booking/services/{service_id}/available-slots",
+            params={"booking_date": booking_date},
         )
         if not services:
             return []
