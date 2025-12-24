@@ -2,14 +2,10 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
-def inline_keyboard_builder(
+def inline_keyboard_fabric(
     buttons: list[dict[str, str]],
     sizes: int = 2,
-    back_text: str = "Back",
-    back_cb: str | None = None,
-) -> InlineKeyboardMarkup:
-    if not buttons:
-        raise ValueError("The list of buttons is empty")
+) -> InlineKeyboardBuilder:
 
     builder = InlineKeyboardBuilder()
 
@@ -22,20 +18,48 @@ def inline_keyboard_builder(
 
         builder.button(text=text, callback_data=call)
 
-        # builder.button(text=button.get("text"), callback_data=button.get("call"))
-
     builder.adjust(sizes)
 
-    if back_cb:
-        builder.row(InlineKeyboardButton(text=back_text, callback_data=back_cb))
-    return builder.as_markup()
+    return builder
 
 
-def inline_back_button(
+def inline_keyboard_builder(
+    buttons: list[dict[str, str]],
+    sizes: int = 2,
     back_text: str = "Back",
-    back_cb: str = "back",
-):
-    return InlineKeyboardButton(text=back_text, callback_data=back_cb)
+    back_cb: str | None = None,
+) -> InlineKeyboardMarkup:
+
+    kb = inline_keyboard_fabric(
+        buttons=buttons,
+        sizes=sizes,
+    )
+    kb.row(inline_back_button(back_cb=back_cb, back_text=back_text))
+    return kb.as_markup()
+
+
+def inline_keyboard_builder_with_pagination(
+    buttons: list[dict[str, str]],
+    pg_coll_prefix: str,
+    page: int,
+    sizes: int = 2,
+    back_text: str = "Back",
+    back_cb: str | None = None,
+) -> InlineKeyboardMarkup:
+    kb = inline_keyboard_fabric(
+        buttons=buttons,
+        sizes=sizes,
+    )
+
+    kb.row(
+        InlineKeyboardButton(
+            text="⬅️", callback_data=f"{pg_coll_prefix}:{max(1, page - 1)}"
+        ),
+        InlineKeyboardButton(text="➡️", callback_data=f"{pg_coll_prefix}:{page + 1}"),
+    )
+
+    kb.row(inline_back_button(back_cb=back_cb, back_text=back_text))
+    return kb.as_markup()
 
 
 def inline_menu_button() -> InlineKeyboardMarkup:
@@ -44,3 +68,10 @@ def inline_menu_button() -> InlineKeyboardMarkup:
             [InlineKeyboardButton(text="Повернутися до меню", callback_data="start")]
         ]
     )
+
+
+def inline_back_button(
+    back_text: str = "Back",
+    back_cb: str = "back",
+):
+    return InlineKeyboardButton(text=back_text, callback_data=back_cb)
