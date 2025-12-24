@@ -34,7 +34,8 @@ def inline_keyboard_builder(
         buttons=buttons,
         sizes=sizes,
     )
-    kb.row(inline_back_button(back_cb=back_cb, back_text=back_text))
+    if back_cb is not None:
+        kb.row(inline_back_button(back_cb=back_cb))
     return kb.as_markup()
 
 
@@ -45,6 +46,7 @@ def inline_keyboard_builder_with_pagination(
     sizes: int = 2,
     back_text: str = "Back",
     back_cb: str | None = None,
+    hes_next: bool = True,
 ) -> InlineKeyboardMarkup:
     kb = inline_keyboard_fabric(
         buttons=buttons,
@@ -55,10 +57,14 @@ def inline_keyboard_builder_with_pagination(
         InlineKeyboardButton(
             text="⬅️", callback_data=f"{pg_coll_prefix}:{max(1, page - 1)}"
         ),
-        InlineKeyboardButton(text="➡️", callback_data=f"{pg_coll_prefix}:{page + 1}"),
+        InlineKeyboardButton(
+            text="➡️",
+            callback_data=f"{pg_coll_prefix}:{page + 1 if hes_next else page}",
+        ),
     )
 
-    kb.row(inline_back_button(back_cb=back_cb, back_text=back_text))
+    if back_cb is not None:
+        kb.row(inline_back_button(back_cb=back_cb))
     return kb.as_markup()
 
 

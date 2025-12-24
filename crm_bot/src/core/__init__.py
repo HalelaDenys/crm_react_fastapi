@@ -6,10 +6,12 @@ __all__ = (
     "inline_back_button",
     "inline_menu_button",
     "AuthError",
+    "inline_keyboard_builder_with_pagination",
 )
 
 from .config import settings
 from .keyboards.inline_fabrics import (
+    inline_keyboard_builder_with_pagination,
     inline_keyboard_builder,
     inline_back_button,
     inline_menu_button,

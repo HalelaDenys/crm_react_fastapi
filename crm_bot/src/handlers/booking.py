@@ -1,3 +1,4 @@
+from aiogram.exceptions import TelegramBadRequest
 from aiogram.types import CallbackQuery, Message, ReplyKeyboardRemove
 from core.keyboards.keyboard_btns import phone_number_kb
 from aiogram.filters.callback_data import CallbackData
@@ -6,6 +7,7 @@ from core.entities import CreateBookingSchema, IsVerifiedBookingSchema
 from aiogram.fsm.context import FSMContext
 from infrastructure import broker
 from core import (
+    inline_keyboard_builder_with_pagination,
     inline_keyboard_builder,
     inline_back_button,
     inline_menu_button,
@@ -39,20 +41,37 @@ async def create_booking(call: CallbackQuery, state: FSMContext):
     )
 
 
+# category:category_id:page
 @router.callback_query(F.data.startswith("category:"))
 async def get_category(call: CallbackQuery, state: FSMContext):
     """
     приймає катерогія та поверає послуги за категоріею
     """
-    category_id = int(call.data.split(":")[1])
+    _, category_id, page = call.data.split(":")
+
     await state.update_data(category_id=category_id)
     await state.set_state(BookingStateForm.service_id)
-    services_list = await api.get_service_by_category(category_id=category_id)
 
-    await call.message.edit_text(
-        "Виберіть послугу",
-        reply_markup=inline_keyboard_builder(services_list, back_cb="create_booking"),
+    services_list, hes_next = await api.get_service_by_category(
+        category_id=category_id, page=int(page)
     )
+
+    text = "Виберіть послугу" if services_list else "Більше послуг немає 👀"
+
+    try:
+        await call.message.edit_text(
+            text=text,
+            reply_markup=inline_keyboard_builder_with_pagination(
+                buttons=services_list,
+                back_cb="create_booking",
+                pg_coll_prefix=f"category:{category_id}",
+                page=int(page),
+                hes_next=hes_next,
+            ),
+        )
+    except TelegramBadRequest as e:
+        if "message is not modified" not in str(e):
+            raise
 
 
 @router.callback_query(F.data.startswith("service:"))
@@ -69,9 +88,10 @@ async def get_service(call: CallbackQuery, state: FSMContext):
         locale=await get_user_locale(call.from_user)
     ).start_calendar()
 
+    call_back_data = f"category:{state_data.get('category_id')}:1"
     calendar_kb.inline_keyboard.append(
         [
-            inline_back_button(back_cb=f"category:{state_data.get('category_id')}"),
+            inline_back_button(back_cb=call_back_data),
         ]
     )
 
