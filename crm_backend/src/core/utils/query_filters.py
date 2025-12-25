@@ -7,7 +7,7 @@ from sqlalchemy.sql import Select
 
 
 def query_filters(
-    stmt,
+    stmt: Select,
     model,
     status: str,
     search: Optional[str] = None,
