@@ -42,6 +42,10 @@ per-file-ignores = [
     "__init__.py:F401"
 ]
 
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+asyncio_mode = "auto"
+
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"
