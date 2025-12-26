@@ -18,6 +18,7 @@ dependencies = [
     "python-jose (>=3.5.0,<3.6.0)",
     "bcrypt (>=4.3.0,<4.4.0)",
     "faststream[rabbit] (>=0.5.48,<0.6.0)",
+    "pytest-dotenv (>=0.5.2,<0.6.0)",
 ]
 
 
@@ -45,6 +46,7 @@ per-file-ignores = [
 [tool.pytest.ini_options]
 pythonpath = ["src"]
 asyncio_mode = "auto"
+env_files = [".env.test"]
 
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]

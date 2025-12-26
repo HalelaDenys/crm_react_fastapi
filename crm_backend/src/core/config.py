@@ -1,3 +1,4 @@
+# from dotenv import load_dotenv
 from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import BaseModel, AmqpDsn
 from typing import ClassVar
@@ -5,7 +6,8 @@ from pathlib import Path
 from datetime import time, timedelta
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+# load_dotenv(BASE_DIR / ".env")
 
 
 class APIPrefix(BaseModel):
@@ -81,6 +83,8 @@ class Settings(BaseSettings):
     api_prefix: APIPrefix = APIPrefix()
     booking: BookingConfig = BookingConfig()
     fs: FastStreamConfig = FastStreamConfig()
+
+    mode: str
 
 
 settings = Settings()
