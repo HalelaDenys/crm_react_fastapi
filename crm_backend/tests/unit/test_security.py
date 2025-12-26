@@ -10,7 +10,7 @@ class TestSecurity:
         [
             ("qwerty", "123456"),
             ("admin_pass", "admin_wrong"),
-            ("secret", "notsecret"),
+            ("secret", "notseкcret"),
         ],
     )
     def test_hash_and_verify_password(self, password, wrong_password):

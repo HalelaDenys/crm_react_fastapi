@@ -1,9 +1,9 @@
 services:
-  postgres_db:
+  postgres_db_test:
     image: postgres:16
-    container_name: crm_db
+    container_name: crm_db_test
     env_file:
-      - .env
+      - .env.test
     environment:
       POSTGRES_USER: "${APP_CONFIG__DB__POSTGRES_USER}"
       POSTGRES_PASSWORD: "${APP_CONFIG__DB__POSTGRES_PASSWORD}"
@@ -16,12 +16,10 @@ services:
       interval: 10s
       retries: 5
     restart: unless-stopped
-    volumes:
-      - postgres_data:/var/lib/postgresql/data
 
-  rabbitmq:
+  rabbitmq_test:
     image: rabbitmq:3-management-alpine
-    container_name: crm_rabbitmq
+    container_name: crm_rabbitmq_test
     environment:
       RABBITMQ_DEFAULT_USER: "guest"
       RABBITMQ_DEFAULT_PASS: "guest"
@@ -29,14 +27,7 @@ services:
       - "5672:5672"   # AMQP
       - "15672:15672" # Web UI
     healthcheck:
-      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
       interval: 10s
       timeout: 5s
       retries: 5
-    volumes:
-      - rabbitmq_data:/var/lib/postgresql/rabbitmq
-
-
-volumes:
-  postgres_data:
-  rabbitmq_data:

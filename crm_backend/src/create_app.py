@@ -15,7 +15,7 @@ async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
     yield
 
     await db_helper.dispose()
-    await broker.close()
+    await broker.stop()
 
 
 def create_app():
