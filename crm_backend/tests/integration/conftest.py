@@ -1,3 +1,5 @@
+from httpx import AsyncClient
+
 from create_app import create_app
 from tests.utils import (
     client_manager,
@@ -5,19 +7,27 @@ from tests.utils import (
     async_session_maker,
     metadata,
     engine_test,
+    insert_into_tables,
 )
-import pytest
 from core import settings
+import pytest_asyncio
+from schemas.employee_shemas import TokenInfo, LoginSchema
+
 
 app = create_app()
 
+pytest_plugins = [
+    "tests.data_fixtures.users",
+]
 
-@pytest.fixture(scope="session", autouse=True)
+
+@pytest_asyncio.fixture(scope="module", autouse=True)
 async def engine():
     assert settings.mode == "TEST"
     async with engine_test.begin() as conn:
         await conn.run_sync(metadata.create_all)
 
+    await insert_into_tables()
     yield
 
     await engine_test.dispose()
@@ -25,7 +35,7 @@ async def engine():
         await conn.run_sync(metadata.drop_all)
 
 
-@pytest.fixture(
+@pytest_asyncio.fixture(
     scope="function",
 )
 async def db_session():
@@ -33,7 +43,23 @@ async def db_session():
         yield session
 
 
-@pytest.fixture(scope="function")
+@pytest_asyncio.fixture(scope="module")
 async def async_client() -> ClientManagerType:
     async with client_manager(app) as client:
         yield client
+
+
+@pytest_asyncio.fixture(
+    scope="function",
+)
+async def login_admin(
+    async_client: AsyncClient,
+    admin_login_data: LoginSchema,
+) -> TokenInfo:
+    response = await async_client.post(
+        "/auth/login", data=admin_login_data.model_dump()
+    )
+
+    assert response.status_code == 200
+
+    return TokenInfo.model_validate(response.json())
