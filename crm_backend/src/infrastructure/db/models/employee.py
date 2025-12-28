@@ -1,5 +1,5 @@
 from infrastructure import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from sqlalchemy import VARCHAR, ForeignKey
 
 from typing import TYPE_CHECKING
@@ -34,3 +34,7 @@ class Employee(Base):
             f"{self.__class__.__name__}(id={self.id}, is_active={self.is_active}, "
             f"is_admin={self.is_admin}, phone_number={self.phone_number})"
         )
+
+    @validates("phone_number")
+    def validate_phone_number(self, _, value: str) -> str:
+        return value.strip().replace(" ", "")
