@@ -1,3 +1,5 @@
+from contextlib import asynccontextmanager
+
 from fastapi.responses import ORJSONResponse
 from typing import AsyncGenerator
 from fastapi import FastAPI
@@ -8,6 +10,7 @@ from core import register_error_handlers, register_middleware
 from faststream.asgi import make_asyncapi_asgi
 
 
+@asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
 
     await broker.start()

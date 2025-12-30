@@ -2,8 +2,6 @@ from services.employee_service import get_employee_service, EmployeeService
 from core.authentication import get_auth_user_from_token_of_type
 from schemas.employee_shemas import LoginSchema
 from fastapi import Depends, Form, HTTPException
-from infrastructure import Employee
-from typing import Annotated
 from core import (
     FORBIDDEN_EXC_NOT_ENOUGH_RIGHTS,
     UNAUTHORIZED_EXC_INCORRECT,
@@ -13,8 +11,9 @@ from core import (
     Security,
     settings,
 )
-
+from infrastructure import Employee
 from faststream import Header
+from typing import Annotated
 
 
 async def authenticate_user(

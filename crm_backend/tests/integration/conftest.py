@@ -35,23 +35,19 @@ async def engine():
         await conn.run_sync(metadata.drop_all)
 
 
-@pytest_asyncio.fixture(
-    scope="function",
-)
+@pytest_asyncio.fixture(scope="function")
 async def db_session():
     async with async_session_maker() as session:
         yield session
 
 
-@pytest_asyncio.fixture(scope="module")
+@pytest_asyncio.fixture(scope="function")
 async def async_client() -> ClientManagerType:
     async with client_manager(app) as client:
         yield client
 
 
-@pytest_asyncio.fixture(
-    scope="function",
-)
+@pytest_asyncio.fixture(scope="function")
 async def login_admin(
     async_client: AsyncClient,
     admin_login_data: LoginSchema,
