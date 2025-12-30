@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from asgi_lifespan import LifespanManager
 from typing import AsyncGenerator
 from sqlalchemy import NullPool
-from infrastructure import Base, Employee, Position
+from infrastructure import Base, Employee, Position, User
 from core import settings, Security
 
 
@@ -53,7 +53,7 @@ def test_data(session: AsyncSession) -> None:
 
     session.add(admin_position)
 
-    admin_user = Employee(
+    admin_emp = Employee(
         first_name="admin",
         last_name="superuser",
         email="admin@example.com",
@@ -63,4 +63,12 @@ def test_data(session: AsyncSession) -> None:
         password=Security.hash_password("admin_password"),
     )
 
-    session.add(admin_user)
+    session.add(admin_emp)
+
+    liza_user = User(
+        first_name="liza",
+        last_name="simson",
+        phone_number="+1 004 552 842",
+    )
+
+    session.add(liza_user)
