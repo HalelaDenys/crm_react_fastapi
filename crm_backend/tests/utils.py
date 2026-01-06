@@ -51,7 +51,10 @@ def test_data(session: AsyncSession) -> None:
         name="admin",
     )
 
-    session.add(admin_position)
+    manager_position = Position(
+        name="manager",
+    )
+    session.add_all([admin_position, manager_position])
 
     admin_emp = Employee(
         first_name="admin",

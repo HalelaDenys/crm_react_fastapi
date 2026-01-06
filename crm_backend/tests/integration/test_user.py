@@ -1,7 +1,7 @@
 from tests.data_fixtures.users import test_user_1, homer_user
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.employee_shemas import TokenInfo
-from schemas.user_schema import UserSchema
+from schemas.employee_shemas import CreateEmployeeSchema
 from infrastructure import User
 from httpx import AsyncClient
 from sqlalchemy import select
@@ -15,7 +15,7 @@ class TestUser:
         async_client: AsyncClient,
         db_session: AsyncSession,
         login_admin: TokenInfo,
-        homer_test_data: UserSchema,
+        homer_test_data: CreateEmployeeSchema,
     ):
         response = await async_client.post(
             "/users",
@@ -28,6 +28,8 @@ class TestUser:
         assert data["first_name"] == homer_test_data.first_name
         assert data["last_name"] == homer_test_data.last_name
         assert data["phone_number"] == homer_test_data.phone_number
+        assert data["email"] == homer_test_data.email
+        assert data["position_id"] == homer_test_data.position_id
 
         stmt = select(User).where(User.id == data["id"])
         result = await db_session.execute(stmt)

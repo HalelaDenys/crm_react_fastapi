@@ -61,7 +61,7 @@ async def update_employee(
     return ReadEmployeeSchema(**employee.to_dict())
 
 
-@router.delete("/{employee_id}", status_code=status.HTTP_200_OK)
+@router.delete("/{employee_id}", status_code=status.HTTP_204_NO_CONTENT)
 async def delete_employee(
     employee_id: Annotated[int, Path(ge=1)],
     employee_service: Annotated["EmployeeService", Depends(get_employee_service)],

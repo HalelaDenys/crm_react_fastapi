@@ -42,7 +42,7 @@ async def create_booking(call: CallbackQuery, state: FSMContext):
 
 
 # category:{category_id}:{page}
-@router.callback_query(F.data.startswith("category:"))
+@router.callback_query(F.data.startswith("category:"), BookingStateForm.category_id)
 async def get_category(call: CallbackQuery, state: FSMContext):
     """
     приймає катерогія та поверає послуги за категоріею
@@ -74,7 +74,7 @@ async def get_category(call: CallbackQuery, state: FSMContext):
             raise
 
 
-@router.callback_query(F.data.startswith("service:"))
+@router.callback_query(F.data.startswith("service:"), BookingStateForm.service_id)
 async def get_service(call: CallbackQuery, state: FSMContext):
     """
     приймає послугу та поертає календер
@@ -101,7 +101,7 @@ async def get_service(call: CallbackQuery, state: FSMContext):
     )
 
 
-@router.callback_query(SimpleCalendarCallback.filter())
+@router.callback_query(SimpleCalendarCallback.filter(), BookingStateForm.booking_date)
 async def get_the_date_from_the_calendar(
     call: CallbackQuery, callback_data: CallbackData, state: FSMContext
 ):
@@ -130,7 +130,9 @@ async def get_the_date_from_the_calendar(
         )
 
 
-@router.callback_query(F.data.startswith("recording_time:"))
+@router.callback_query(
+    F.data.startswith("recording_time:"), BookingStateForm.start_time
+)
 async def get_recording_time(call: CallbackQuery, state: FSMContext):
     """
     приймає час та відправляю кнопку для номера телефону
@@ -147,7 +149,7 @@ async def get_recording_time(call: CallbackQuery, state: FSMContext):
     )
 
 
-@router.message(F.contact)
+@router.message(F.contact, BookingStateForm.phone_number)
 async def save_contact(message: Message, state: FSMContext):
     """
     оброблає номер телефону та завершаю бронювання
