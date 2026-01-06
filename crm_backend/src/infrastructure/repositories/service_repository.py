@@ -1,7 +1,7 @@
 from infrastructure.repositories.sqlalchemy_repository import SQLAlchemyRepository
 from infrastructure.db.models.service import Service
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select
 from typing import Sequence
 
 
