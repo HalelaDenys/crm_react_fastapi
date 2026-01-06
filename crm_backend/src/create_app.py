@@ -6,19 +6,20 @@ from fastapi import FastAPI
 from infrastructure import db_helper
 from infrastructure.fs_broker.broker import broker, fs_app
 from api import api_router
-from core import register_error_handlers, register_middleware
+from core import register_error_handlers, register_middleware, settings
 from faststream.asgi import make_asyncapi_asgi
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
-
-    await broker.start()
+    if settings.fs.enable_broker:
+        await broker.start()
 
     yield
 
     await db_helper.dispose()
-    await broker.stop()
+    if settings.fs.enable_broker:
+        await broker.stop()
 
 
 def create_app():

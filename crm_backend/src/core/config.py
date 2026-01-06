@@ -68,6 +68,7 @@ class BookingConfig(BaseModel):
 
 class FastStreamConfig(BaseModel):
     rabbit_url: AmqpDsn = "amqp://guest:guest@localhost:5672/"
+    enable_broker: bool
 
 
 class Settings(BaseSettings):
@@ -80,9 +81,9 @@ class Settings(BaseSettings):
     db: DBConfig
     midd: MiddlewareConfig
     jwt: AUTHConfig
+    fs: FastStreamConfig
     api_prefix: APIPrefix = APIPrefix()
     booking: BookingConfig = BookingConfig()
-    fs: FastStreamConfig = FastStreamConfig()
 
     mode: str
 
