@@ -1,4 +1,6 @@
 import pytest
+
+from infrastructure.db.models import employee
 from schemas.employee_shemas import CreateEmployeeSchema
 
 
@@ -12,6 +14,19 @@ def petro_test_data() -> CreateEmployeeSchema:
         position_id=petro_user["position_id"],
         is_admin=petro_user["is_admin"],
         password=petro_user["password"],
+    )
+
+
+@pytest.fixture
+async def emp_ron_data() -> CreateEmployeeSchema:
+    return CreateEmployeeSchema(
+        first_name=ron_emp["first_name"],
+        last_name=ron_emp["last_name"],
+        phone_number=ron_emp["phone_number"],
+        email=ron_emp["email"],
+        position_id=ron_emp["position_id"],
+        is_admin=False,
+        password=ron_emp["password"],
     )
 
 
@@ -37,4 +52,15 @@ test_emp_1 = {
     "is_active": True,
     "is_admin": False,
     "password": "test_password",
+}
+
+ron_emp = {
+    "first_name": "Roni",
+    "last_name": "Ronin",
+    "phone_number": "+1 231 004 199",
+    "email": "ron11@example.com",
+    "position_id": 2,
+    "is_active": True,
+    "is_admin": False,
+    "password": "ron_0012dsa",
 }

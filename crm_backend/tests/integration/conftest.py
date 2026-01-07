@@ -8,7 +8,6 @@ from tests.utils import (
     metadata,
     engine_test,
     insert_into_tables,
-    test_data,
 )
 from core import settings
 import pytest_asyncio
