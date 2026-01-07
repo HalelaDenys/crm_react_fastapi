@@ -47,6 +47,8 @@ async def insert_into_tables() -> None:
 
 
 def test_data(session: AsyncSession) -> None:
+    from tests.data_fixtures.users import liza_user
+
     admin_position = Position(
         name="admin",
     )
@@ -68,10 +70,10 @@ def test_data(session: AsyncSession) -> None:
 
     session.add(admin_emp)
 
-    liza_user = User(
-        first_name="liza",
-        last_name="simson",
-        phone_number="+1 004 552 842",
+    test_liza_user = User(
+        first_name=liza_user["first_name"],
+        last_name=liza_user["last_name"],
+        phone_number=liza_user["phone_number"],
     )
 
-    session.add(liza_user)
+    session.add(test_liza_user)

@@ -1,5 +1,5 @@
 from infrastructure import Base
-from sqlalchemy.orm import Mapped, mapped_column, relationship
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 from sqlalchemy import VARCHAR
 from typing import TYPE_CHECKING
 
@@ -16,4 +16,11 @@ class User(Base):
     bookings: Mapped[list["Booking"]] = relationship("Booking", back_populates="user")
 
     def __repr__(self):
-        return f"{self.__class__.__name__}(id={self.id}, is_active={self.is_active})"
+        return (
+            f"{self.__class__.__name__}(id={self.id}, is_active={self.is_active}, "
+            f"first_name={self.first_name}, phone_number={self.phone_number}, )"
+        )
+
+    @validates("phone_number")
+    def validate_phone_number(self, _, value: str) -> str:
+        return value.strip().replace(" ", "")

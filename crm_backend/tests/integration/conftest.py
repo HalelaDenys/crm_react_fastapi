@@ -8,6 +8,7 @@ from tests.utils import (
     metadata,
     engine_test,
     insert_into_tables,
+    test_data,
 )
 from core import settings
 import pytest_asyncio
@@ -31,15 +32,16 @@ async def engine():
     await insert_into_tables()
     yield
 
-    await engine_test.dispose()
     async with engine_test.begin() as conn:
         await conn.run_sync(metadata.drop_all)
+    await engine_test.dispose()
 
 
 @pytest_asyncio.fixture(scope="function")
 async def db_session():
     async with async_session_maker() as session:
         yield session
+        await session.rollback()
 
 
 @pytest_asyncio.fixture(scope="function")
