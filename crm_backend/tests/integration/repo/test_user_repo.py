@@ -1,8 +1,6 @@
-import pytest
-from sqlalchemy.ext.asyncio import AsyncSession
-
-from infrastructure import UserRepository, User
 from schemas.user_schema import UserSchema, UpdateUserSchema
+from infrastructure import UserRepository, User
+import pytest
 
 
 @pytest.mark.asyncio
