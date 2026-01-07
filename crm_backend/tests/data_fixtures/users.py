@@ -20,6 +20,15 @@ def homer_test_data() -> UserSchema:
     )
 
 
+@pytest.fixture
+def liza_test_data() -> UserSchema:
+    return UserSchema(
+        first_name=liza_user["first_name"],
+        last_name=liza_user["last_name"],
+        phone_number=liza_user["phone_number"],
+    )
+
+
 test_user_1 = {
     "first_name": "test_user_1",
     "last_name": "test_user_1",
@@ -30,4 +39,11 @@ homer_user = {
     "first_name": "Homer",
     "last_name": "Simson",
     "phone_number": "+1 923 021 339",
+}
+
+liza_user = {
+    "id": 1,
+    "first_name": "Liza",
+    "last_name": "simson",
+    "phone_number": "+1 004 552 842",
 }
