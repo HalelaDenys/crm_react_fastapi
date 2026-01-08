@@ -4,6 +4,7 @@ from infrastructure import (
     EmployeeRepository,
     PositionRepository,
     CategoryRepository,
+    ServiceRepository,
 )
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -26,3 +27,8 @@ async def pos_repo(db_session: AsyncSession) -> PositionRepository:
 @pytest_asyncio.fixture
 async def category_repo(db_session: AsyncSession) -> CategoryRepository:
     return CategoryRepository(db_session)
+
+
+@pytest_asyncio.fixture
+async def service_repo(db_session: AsyncSession) -> ServiceRepository:
+    return ServiceRepository(db_session)

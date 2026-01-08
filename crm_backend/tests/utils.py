@@ -4,7 +4,7 @@ from contextlib import asynccontextmanager
 from asgi_lifespan import LifespanManager
 from typing import AsyncGenerator
 from sqlalchemy import NullPool
-from infrastructure import Base, Employee, Position, User, Category
+from infrastructure import Base, Employee, Position, User, Category, Service
 from core import settings, Security
 
 
@@ -51,6 +51,7 @@ def test_data(session: AsyncSession) -> None:
     from tests.data_fixtures.users import liza_user
     from tests.data_fixtures.emps import ron_emp
     from tests.data_fixtures.category import quick_works, diagnostics
+    from tests.data_fixtures.service import oil_filter_replacement, brake_diagnostics
 
     admin_position = Position(
         name="admin",
@@ -95,3 +96,19 @@ def test_data(session: AsyncSession) -> None:
     data_diagnostics = Category(name=diagnostics["name"])
 
     session.add_all([data_quick_works, data_diagnostics])
+
+    data_oil_filter_replacement = Service(
+        name=oil_filter_replacement["name"],
+        duration_minutes=oil_filter_replacement["duration_minutes"],
+        price=oil_filter_replacement["price"],
+        category_id=oil_filter_replacement["category_id"],
+    )
+
+    data_brake_diagnostics = Service(
+        name=brake_diagnostics["name"],
+        duration_minutes=brake_diagnostics["duration_minutes"],
+        price=brake_diagnostics["price"],
+        category_id=brake_diagnostics["category_id"],
+    )
+
+    session.add_all([data_oil_filter_replacement, data_brake_diagnostics])

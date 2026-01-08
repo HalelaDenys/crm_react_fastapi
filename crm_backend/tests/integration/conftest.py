@@ -21,6 +21,7 @@ pytest_plugins = [
     "tests.data_fixtures.emps",
     "tests.data_fixtures.positions",
     "tests.data_fixtures.category",
+    "tests.data_fixtures.service",
 ]
 
 
