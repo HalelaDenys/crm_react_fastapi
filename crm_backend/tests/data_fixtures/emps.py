@@ -1,6 +1,4 @@
 import pytest
-
-from infrastructure.db.models import employee
 from schemas.employee_shemas import CreateEmployeeSchema
 
 
