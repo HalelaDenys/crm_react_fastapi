@@ -19,6 +19,8 @@ app = create_app()
 pytest_plugins = [
     "tests.data_fixtures.users",
     "tests.data_fixtures.emps",
+    "tests.data_fixtures.positions",
+    "tests.data_fixtures.category",
 ]
 
 
