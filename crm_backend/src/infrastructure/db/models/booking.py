@@ -44,8 +44,8 @@ class Booking(Base):
     def __repr__(self) -> str:
         return (
             f"{self.__class__.__name__}(id={self.id}, service_id={self.service_id}, "
-            f"booking_date={self.booking_date}, start_date={self.start_date}, "
-            f"end_date={self.end_date}, user_id={self.user_id}, "
+            f"booking_date={self.booking_date}, start_time={self.start_time}, "
+            f"end_time={self.end_time}, user_id={self.user_id}, "
             f"tg_user_id={self.tg_user_id})"
             f"created_at={self.created_at}, updated_at={self.updated_at})"
         )
