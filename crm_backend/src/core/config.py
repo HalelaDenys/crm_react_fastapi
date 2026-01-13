@@ -56,7 +56,6 @@ class AUTHConfig(BaseModel):
     secret_key: str
     access_expire_day: int
     refresh_expire_day: int
-    tg_api_secret: str
     algorithm: str = "HS256"
 
 
@@ -69,6 +68,7 @@ class BookingConfig(BaseModel):
 class FastStreamConfig(BaseModel):
     rabbit_url: AmqpDsn = "amqp://guest:guest@localhost:5672/"
     enable_broker: bool
+    tg_api_secret: str
 
 
 class Settings(BaseSettings):

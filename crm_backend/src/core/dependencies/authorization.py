@@ -58,5 +58,5 @@ def check_user_is_admin(
 
 
 async def verify_tg_request(authorization: Annotated[str, Header()]):
-    if authorization != f"Bearer {settings.jwt.tg_api_secret}":
+    if authorization != f"Bearer {settings.fs.tg_api_secret}":
         raise HTTPException(status_code=403, detail="Not allowed")
