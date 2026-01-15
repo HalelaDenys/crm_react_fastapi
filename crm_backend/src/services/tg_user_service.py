@@ -9,8 +9,8 @@ from services.base_service import BaseService
 
 
 class TgUserService(BaseService):
-    def __init__(self, session: AsyncSession):
-        self._tg_user_repository = TgUserRepository(session)
+    def __init__(self, tg_user_repository: TgUserRepository):
+        self._tg_user_repository = tg_user_repository
 
     async def add(self, data: TgUserSchema) -> TgUser:
         if await self._tg_user_repository.find_single(telegram_id=data.telegram_id):
@@ -35,4 +35,5 @@ class TgUserService(BaseService):
 
 async def get_tg_user_service() -> AsyncGenerator["TgUserService", None]:
     async with db_helper.get_session() as session:
-        yield TgUserService(session=session)
+        tg_user_repo = TgUserRepository(session)
+        yield TgUserService(tg_user_repository=tg_user_repo)

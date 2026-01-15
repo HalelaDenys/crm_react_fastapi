@@ -7,8 +7,8 @@ from schemas.category_schema import CreateCategorySchema, ReadCategorySchema
 
 
 class CategoryService(BaseService):
-    def __init__(self, session: AsyncSession):
-        self._category_repository = CategoryRepository(session)
+    def __init__(self, category_repository: CategoryRepository):
+        self._category_repository = category_repository
 
     async def add(self, data: CreateCategorySchema) -> Category:
         if await self._category_repository.find_single(name=data.name):
@@ -35,4 +35,5 @@ class CategoryService(BaseService):
 
 async def get_category_service() -> AsyncGenerator["CategoryService", None]:
     async with db_helper.get_session() as session:
-        yield CategoryService(session)
+        category_repo = CategoryRepository(session)
+        yield CategoryService(category_repository=category_repo)

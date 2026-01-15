@@ -7,8 +7,8 @@ from typing import AsyncGenerator
 
 
 class PositionService(BaseService):
-    def __init__(self, session: AsyncSession):
-        self._position_repository = PositionRepository(session)
+    def __init__(self, position_repository: PositionRepository):
+        self._position_repository = position_repository
 
     async def add(self, data: CreatePositionSchema) -> Position:
         if await self._position_repository.find_single(name=data.name):
@@ -34,4 +34,5 @@ class PositionService(BaseService):
 
 async def get_position_service() -> AsyncGenerator[PositionService, None]:
     async with db_helper.get_session() as session:
-        yield PositionService(session)
+        position_repo = PositionRepository(session)
+        yield PositionService(position_repository=position_repo)

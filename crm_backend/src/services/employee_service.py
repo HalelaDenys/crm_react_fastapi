@@ -15,8 +15,8 @@ from core import Security
 
 
 class EmployeeService(BaseService):
-    def __init__(self, session: AsyncSession):
-        self._employee_repository = EmployeeRepository(session)
+    def __init__(self, emp_repository: EmployeeRepository):
+        self._employee_repository = emp_repository
 
     async def add(self, data: CreateEmployeeSchema) -> Employee:
         if await self._employee_repository.find_single(phone_number=data.phone_number):
@@ -59,4 +59,5 @@ class EmployeeService(BaseService):
 
 async def get_employee_service() -> AsyncGenerator[EmployeeService, None]:
     async with db_helper.get_session() as session:
-        yield EmployeeService(session)
+        emp_repository = EmployeeRepository(session)
+        yield EmployeeService(emp_repository=emp_repository)

@@ -12,8 +12,8 @@ from typing import AsyncGenerator
 
 
 class UserService(BaseService):
-    def __init__(self, session: AsyncSession):
-        self._user_repository = UserRepository(session)
+    def __init__(self, user_repository: UserRepository):
+        self._user_repository = user_repository
 
     async def add(self, data: UserSchema) -> User:
         await self.check_phone_number(phone_number=data.phone_number)
@@ -51,4 +51,5 @@ class UserService(BaseService):
 
 async def get_user_service() -> AsyncGenerator[UserService, None]:
     async with db_helper.get_session() as session:
-        yield UserService(session=session)
+        user_repo = UserRepository(session)
+        yield UserService(user_repository=user_repo)

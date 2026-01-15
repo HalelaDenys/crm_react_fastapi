@@ -1,6 +1,5 @@
 from schemas.user_schema import UpdatePhoneNumberTgUserSchema
 from core.exceptions import NotFoundError, AlreadyExistsError
-from sqlalchemy.ext.asyncio import AsyncSession
 from datetime import timedelta, datetime, date
 from services.base_service import BaseService
 from schemas.booking_schema import (
@@ -26,10 +25,16 @@ from core import settings
 
 
 class BookingService(BaseService):
-    def __init__(self, session: AsyncSession):
-        self._booking_repository = BookingRepository(session)
-        self._service_repository = ServiceRepository(session)
-        self._tg_user_repository = TgUserRepository(session)
+
+    def __init__(
+        self,
+        booking_repository: BookingRepository,
+        service_repository: ServiceRepository,
+        tg_user_repository: TgUserRepository,
+    ):
+        self._booking_repository = booking_repository
+        self._service_repository = service_repository
+        self._tg_user_repository = tg_user_repository
 
     async def add(self, data: CreateBookingResponseSchema) -> Booking:
         # check service
@@ -172,4 +177,11 @@ class BookingService(BaseService):
 
 async def get_booking_service() -> AsyncGenerator["BookingService", None]:
     async with db_helper.get_session() as session:
-        yield BookingService(session)
+        booking_repo = BookingRepository(session)
+        service_repo = ServiceRepository(session)
+        tg_user_repo = TgUserRepository(session)
+        yield BookingService(
+            booking_repository=booking_repo,
+            service_repository=service_repo,
+            tg_user_repository=tg_user_repo,
+        )

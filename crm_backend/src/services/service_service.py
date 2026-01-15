@@ -13,8 +13,8 @@ from typing import AsyncGenerator
 
 
 class ServiceService(BaseService):
-    def __init__(self, session: AsyncSession):
-        self._service_repository = ServiceRepository(session)
+    def __init__(self, service_repository: ServiceRepository):
+        self._service_repository = service_repository
 
     async def add(self, data: CreateServiceSchema) -> Service:
         if await self._service_repository.find_single(name=data.name):
@@ -53,4 +53,5 @@ class ServiceService(BaseService):
 
 async def get_service() -> AsyncGenerator["ServiceService", None]:
     async with db_helper.get_session() as session:
-        yield ServiceService(session)
+        service_repo = ServiceRepository(session)
+        yield ServiceService(service_repository=service_repo)
