@@ -2,7 +2,9 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 from pydantic import BaseModel, AmqpDsn
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
+print(BASE_DIR)
 
 
 class BotConfig(BaseModel):
@@ -33,7 +35,7 @@ class Settings(BaseSettings):
     bot: BotConfig
     api: ApiConfig = ApiConfig()
     fs: FastStreamConfig
-    pag: PaginationConfig
+    pag: PaginationConfig = PaginationConfig()
 
 
 settings = Settings()
