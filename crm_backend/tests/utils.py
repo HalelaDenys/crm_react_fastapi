@@ -1,5 +1,14 @@
 from sqlalchemy.ext.asyncio import create_async_engine, async_sessionmaker, AsyncSession
-from infrastructure import Base, Employee, Position, User, Category, Service, Booking
+from infrastructure import (
+    Base,
+    Employee,
+    Position,
+    User,
+    Category,
+    Service,
+    Booking,
+    TgUser,
+)
 from httpx import AsyncClient, ASGITransport
 from contextlib import asynccontextmanager
 from asgi_lifespan import LifespanManager
@@ -135,3 +144,14 @@ async def test_data(session: AsyncSession) -> None:
     )
 
     session.add_all([first_booking, second_booking])
+
+    # ---- Tg User
+    first_tg_user = TgUser(
+        telegram_id=123123123,
+        phone_number="",
+        first_name="homer_tg_user",
+        last_name="homer_tg_user",
+        username="homer_tg_user",
+    )
+
+    session.add(first_tg_user)

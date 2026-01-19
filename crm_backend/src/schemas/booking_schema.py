@@ -26,6 +26,7 @@ class CreateBookingResponseSchema(BaseSchema):
             return value  # дозволяємо не передавати номер
 
         if not value.startswith("+"):
+            value = value.strip().replace(" ", "")
             value = f"+{value}"
 
         if not re.match(r"^\+\d{5,15}$", value):

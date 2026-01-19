@@ -69,6 +69,7 @@ class FastStreamConfig(BaseModel):
     rabbit_url: AmqpDsn = "amqp://guest:guest@localhost:5672/"
     enable_broker: bool
     tg_api_secret: str
+    with_real: bool = False
 
 
 class Settings(BaseSettings):
