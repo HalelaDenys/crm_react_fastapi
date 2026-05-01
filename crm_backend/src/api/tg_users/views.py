@@ -21,7 +21,7 @@ async def create_tg_users(
     await broker.publish(
         user_data.model_dump(),
         queue="tg_users.created",
-        headers={"authorization": f"Bearer {settings.jwt.tg_api_secret}"},
+        headers={"authorization": f"Bearer {settings.fs.tg_api_secret}"},
     )
     return ORJSONResponse(
         status_code=status.HTTP_201_CREATED, content={"success": True}

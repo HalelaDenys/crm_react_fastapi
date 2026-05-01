@@ -1,7 +1,4 @@
 from typing import AsyncGenerator
-
-from sqlalchemy.ext.asyncio import AsyncSession
-
 from core.exceptions import AlreadyExistsError, NotFoundError
 from infrastructure import TgUserRepository, TgUser, db_helper
 from schemas.user_schema import TgUserSchema
@@ -13,8 +10,6 @@ class TgUserService(BaseService):
         self._tg_user_repository = tg_user_repository
 
     async def add(self, data: TgUserSchema) -> TgUser:
-        if await self._tg_user_repository.find_single(telegram_id=data.telegram_id):
-            raise AlreadyExistsError("User already exists")
         return await self._tg_user_repository.create(data)
 
     async def update(self, tg_user_id: int, data):
