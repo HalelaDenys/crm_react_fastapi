@@ -4,8 +4,6 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-print(BASE_DIR)
-
 
 class BotConfig(BaseModel):
     token: str
@@ -24,6 +22,16 @@ class PaginationConfig(BaseSettings):
     limit_service: int = 2
 
 
+class RedisConfig(BaseSettings):
+    host: str = "localhost"
+    port: int = 6379
+    db: int = 1
+
+    @property
+    def dsh(self) -> str:
+        return f"redis://{self.host}:{self.port}/{self.db}"
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=BASE_DIR / ".env",
@@ -35,6 +43,7 @@ class Settings(BaseSettings):
     bot: BotConfig
     api: ApiConfig = ApiConfig()
     fs: FastStreamConfig
+    redis: RedisConfig = RedisConfig()
     pag: PaginationConfig = PaginationConfig()
 
 

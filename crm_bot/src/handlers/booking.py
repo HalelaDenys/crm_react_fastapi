@@ -5,7 +5,7 @@ from aiogram.filters.callback_data import CallbackData
 from faststream.exceptions import FastStreamException
 from core.entities import CreateBookingSchema, IsVerifiedBookingSchema
 from aiogram.fsm.context import FSMContext
-from infrastructure import broker
+from infrastructure import container
 from core import (
     inline_keyboard_builder_with_pagination,
     inline_keyboard_builder,
@@ -13,7 +13,6 @@ from core import (
     inline_menu_button,
     BookingStateForm,
     settings,
-    api,
 )
 from aiogram import Router, F
 from aiogram_calendar import (
@@ -34,7 +33,7 @@ async def create_booking(call: CallbackQuery, state: FSMContext):
     Починає процес створення замовлення
     """
     await state.set_state(BookingStateForm.category_id)
-    categories_list = await api.get_category()
+    categories_list = await container.api.get_category()
     await call.message.edit_text(
         "Виберіть категорію",
         reply_markup=inline_keyboard_builder(categories_list, back_cb="start"),
@@ -52,7 +51,7 @@ async def get_category(call: CallbackQuery, state: FSMContext):
     await state.update_data(category_id=category_id)
     await state.set_state(BookingStateForm.service_id)
 
-    services_list, hes_next = await api.get_service_by_category(
+    services_list, hes_next = await container.api.get_service_by_category(
         category_id=category_id,
         page=int(page),
         limit=settings.pag.limit_service,
@@ -118,7 +117,7 @@ async def get_the_date_from_the_calendar(
         state_data = await state.get_data()
         service_id = int(state_data.get("service_id"))
 
-        available_slots = await api.get_available_slots(
+        available_slots = await container.api.get_available_slots(
             service_id=service_id,
             booking_date=date.strftime("%Y-%m-%d"),
         )
@@ -173,7 +172,7 @@ async def save_contact(message: Message, state: FSMContext):
 
     try:
         logging.info("Publishing booking_data")
-        await broker.publish(
+        await container.broker.publish(
             booking_data.model_dump(mode="json"),
             queue="booking.created",
             headers={"authorization": f"Bearer {settings.fs.tg_api_secret}"},
@@ -200,7 +199,7 @@ async def confirm_booking(call: CallbackQuery):
         is_verified=is_verified,
     )
     try:
-        await broker.publish(
+        await container.broker.publish(
             booking_date.model_dump(mode="json"),
             queue="booking.verified",
             headers={"authorization": f"Bearer {settings.fs.tg_api_secret}"},
