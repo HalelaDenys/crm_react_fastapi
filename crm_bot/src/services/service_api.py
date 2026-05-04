@@ -41,6 +41,3 @@ class ServiceAPI(APIClient):
             }
             for service in services
         ]
-
-
-api = ServiceAPI(base_url=settings.api.base_url)
