@@ -1,7 +1,7 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
 from aiogram.types import CallbackQuery, Message
-
+from dtos.dto import MapperDTO
 from core import inline_keyboard_builder
 
 router = Router()
@@ -12,8 +12,8 @@ async def send_main_menu(target: CallbackQuery | Message):
         "Menu",
         reply_markup=inline_keyboard_builder(
             [
-                {"text": "Бронювання", "call": "create_booking"},
-                {"text": "Час роботи ", "call": "work_time"},
+                MapperDTO(text="Бронювання", call="create_booking"),
+                MapperDTO(text="Час роботи ", call="work_time"),
             ]
         ),
     )
