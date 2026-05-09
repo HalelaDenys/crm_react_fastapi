@@ -1,17 +1,18 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
+from dtos.dto import MapperDTO
 
 
 def inline_keyboard_fabric(
-    buttons: list[dict[str, str]],
+    buttons: list[MapperDTO],
     sizes: int = 2,
 ) -> InlineKeyboardBuilder:
 
     builder = InlineKeyboardBuilder()
 
     for button in buttons:
-        text = button.get("text")
-        call = button.get("call")
+        text = button.text
+        call = button.call
 
         if text is None or call is None:
             raise ValueError("Button must contain 'text' and 'call'")
@@ -24,7 +25,7 @@ def inline_keyboard_fabric(
 
 
 def inline_keyboard_builder(
-    buttons: list[dict[str, str]],
+    buttons: list[MapperDTO],
     sizes: int = 2,
     back_text: str = "Back",
     back_cb: str | None = None,
@@ -40,7 +41,7 @@ def inline_keyboard_builder(
 
 
 def inline_keyboard_builder_with_pagination(
-    buttons: list[dict[str, str]],
+    buttons: list[MapperDTO],
     pg_coll_prefix: str,
     page: int,
     sizes: int = 2,
