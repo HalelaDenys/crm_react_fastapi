@@ -2,7 +2,7 @@ from faststream.rabbit import RabbitRouter
 from faststream import Context
 from typing import Annotated
 from aiogram import Bot
-
+from dtos.dto import MapperDTO
 from core.keyboards.inline_fabrics import inline_keyboard_builder
 from core.entities import BookingConfirmNotificationSchema
 
@@ -22,14 +22,14 @@ async def booking_confirm_notification(
         f"{notification_date.start_time}",
         reply_markup=inline_keyboard_builder(
             buttons=[
-                {
-                    "text": "Підтвердити",
-                    "call": f"confirm_booking:{notification_date.booking_id}",
-                },
-                {
-                    "text": "Скасувати",
-                    "call": f"cancel_booking:{notification_date.booking_id}",
-                },
+                MapperDTO(
+                    text="Підтвердити",
+                    call=f"confirm_booking:{notification_date.booking_id}",
+                ),
+                MapperDTO(
+                    text="Скасувати",
+                    call=f"cancel_booking:{notification_date.booking_id}",
+                ),
             ]
         ),
     )
