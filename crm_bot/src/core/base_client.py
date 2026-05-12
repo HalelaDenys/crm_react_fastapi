@@ -34,7 +34,7 @@ class APIClient:
         return self._client
 
     @retry(max_attempts=5)
-    async def get(self, path: str, params: dict | None = None) -> dict | list:
+    async def get(self, path: str, params: dict | None = None):
         headers = self._get_headers()
         client = self._get_client()
         response = await client.get(
