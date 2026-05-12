@@ -41,13 +41,13 @@ class ServiceService(BaseService):
         page: int,
     ) -> ReadServiceSchemaPag:
 
-        services, hes_next = await self._service_repository.find_all_pag(
+        services, has_next = await self._service_repository.find_all_pag(
             category_id=category_id, limit=limit, page=page
         )
         service_data = [ReadServiceSchema(**service.to_dict()) for service in services]
         return ReadServiceSchemaPag(
             service_data=service_data,
-            hes_next=hes_next,
+            has_next=has_next,
         )
 
 

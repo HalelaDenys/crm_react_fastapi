@@ -18,4 +18,4 @@ class ReadServiceSchema(CreateServiceSchema):
 
 class ReadServiceSchemaPag(BaseSchema):
     service_data: list[ReadServiceSchema]
-    hes_next: bool
+    has_next: bool
